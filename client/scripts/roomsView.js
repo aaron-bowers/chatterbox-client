@@ -1,30 +1,33 @@
-// RoomsView is an object which controls the DOM elements
-// responsible for displaying and selecting rooms.
+// This object houses all the room _data_ for the app.
+// Treat it like a data structure - add methods to interact
+// with and manipulate the data.
 
-var RoomsView = {
+var Rooms = {
 
-  $button: $('#rooms button'),
-  $select: $('#rooms select'),
+  // TODO: Define how you want to store the list of rooms
+  _data: new Set(),
+  selected: 'lobby',
 
-  initialize: function() {
-    // TODO: Perform any work which needs to be done
-    // when this view loads.
+  // TODO: Define methods which allow you to add rooms, update the list,
+  // mark a room as selected, etc.
+  items: function() {
+    return [...Rooms.storage];
   },
 
-  render: function() {
-    // TODO: Render out the list of rooms.
+  isSelected: function(roomname = 'lobby') {
+    return roomname === Rooms.selected;
   },
 
-  renderRoom: function(roomname) {
-    // TODO: Render out a single room.
+  add: function(roomname, callback = () => {}) {
+    Rooms._data.add(roomname);
+    Rooms.selected = room;
+    callback(Rooms.items());
   },
 
-  handleChange: function(event) {
-    // TODO: Handle a user selecting a different room.
-  },
-
-  handleClick: function(event) {
-    // TODO: Handle the user clicking the "Add Room" button.
+  update: function(messages, callback = () => {}) {
+    messages.forEach(message => {
+      Rooms.add(message.roomname);
+    });
+    callback(Rooms.items());
   }
-
 };
