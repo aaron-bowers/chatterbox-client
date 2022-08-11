@@ -8,11 +8,11 @@ var App = {
 
   username: 'anonymous',
 
-  initialize: function() {
+  initialize: function () {
     App.username = window.location.search.substr(10);
 
     FormView.initialize();
-    RoomsView.initialize();
+    RoomsView.isSelected();
     MessagesView.initialize();
 
     // Fetch initial batch of messages
@@ -21,33 +21,29 @@ var App = {
 
     // TODO: Make sure the app loads data from the API
     // continually, instead of just once at the start.
-    // setInterval(App.fetch, 3000);
+    setInterval(App.fetch, 1000);
   },
 
-  fetch: function(callback = ()=>{}) {
-    Parse.readAll((data) => {
+  fetch: function (callback = () => { }) {
+    Parse.readAll(({ results }) => {
       // examine the response from the server request:
-      console.log(data);
+      console.log(results);
 
       // TODO: Use the data to update Messages and Rooms
       // and re-render the corresponding views.
-      MessagesView.render(data);
-      // for (var i = 0; i < data.length; i++) {
-      //   var user = data[i];
-      //   // input this data into the messages.js
-      //   Messages._data.push(user);
-      // }
+      Messages.update(results, MessagesView.render); // pass MessagesView.render as a callback if Messages.update is async
+      Rooms.update(results, RoomsView.render);
 
       callback();
     });
   },
 
-  startSpinner: function() {
+  startSpinner: function () {
     App.$spinner.show();
     FormView.setStatus(true);
   },
 
-  stopSpinner: function() {
+  stopSpinner: function () {
     App.$spinner.fadeOut('fast');
     FormView.setStatus(false);
   }

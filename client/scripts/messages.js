@@ -11,23 +11,23 @@ var Messages = {
   // add to, and
   // generally interact with the messages, and
   // manipulate
-  items: function() {
+  items: function () {
     return Object.values(Messages._data);
   },
 
-  add: function(message, callback) {
-    Messages.data[message['message_id']] = Messages.conform(message);
+  add: function (message, callback) {
+    Messages._data[message['message_id']] = Messages.conform(message);
     callback(Messages.items());
   },
 
-  update: function(messages, callback) {
+  update: function (messages, callback) {
     for (const message of messages) {
-      Messages.data[message['message_id']] = message;
+      Messages.add(message);
     }
-    callback(Object.value(Messages._data));
+    callback(Messages.items());
   },
 
-  conform: function(message) {
+  conform: function (message) {
     message.text = message.text || '';
     message.username = message.username || '';
     message.roomname = message.roomname || '';
